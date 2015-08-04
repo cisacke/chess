@@ -45,6 +45,10 @@ class Piece
     self.color = false if location[0].between?(6,7)
   end
 
+  def color?
+    @color
+  end
+
 end
 
 class SlidingPiece < Piece

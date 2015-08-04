@@ -39,10 +39,45 @@ class Board
 
   end
 
-  def valid_move?
+  def valid_move?(start_pos, end_pos)
+    # look at
+
+    # what piece is at that position?
+    # where can it move (call move method on that piece)
+    # is the end position located in any of the sub arrays in the move return array
+        # furthermore, is anything in between the start and the end
+
+    # is that end point available for that piece?
+    x,y = start_pos
+    if grid[x][y].moves.flatten.include?(end_pos)
+      check_array = find_check_array(start_pos, end_pos) #build sub_array
+      check_array[0..-2].each do |el|
+        x, y = el
+        return false if grid[x][y] != nil
+      end
+      last_el = check_array[-1]
+      return false if grid[last_el[0]][last_el[1]].color? 
+      #look through each sub_array[start]
+    # is it
     #
   end
 
+  def find_check_array(start_pos, end_pos)
+    grid[x][y].moves.each do |move|
+      if move.include?(end_pos)
+        idx = grid[x][y].index(end_pos)
+        return grid[x][y].moves[0..idx]
+      end
+    end
+  end
+
+
+  def in_check? #needs to know if the player is white or black
+    # loop through grid and find where white king is
+    # which black pieces have the position of the king in their next move
+    # if they do, this is a check
+    #
+  end
 
 
 
