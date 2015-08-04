@@ -1,5 +1,5 @@
 class Piece
-  
+
   DIAGONAL_CHANGE = [
     [1,1],
     [-1,-1],
@@ -49,8 +49,8 @@ end
 
 class SlidingPiece < Piece
 
-  def initialize(position,color)
-    super(position,color)
+  def initialize(position)
+    super(position)
   end
 
   def moves
@@ -133,8 +133,7 @@ class Pawn < Piece
     pos_list = []
     PAWN_CHANGE.each do | dx,dy |
       x , y = location
-    # only use [2,0] if pawn is in row 1 and is_white? or
-    # only use  [-2,0] if pawn is in row 6 and !is_white?
+
     next if [dx, dy] == [2, 0] unless x == 1 && is_white?
     next if [dx, dy] == [2, 0] unless x == 6 && !is_white?
       is_white? ? pos_list << [x + dx, y + dy] : pos_list << [x - dx, y + dy]
