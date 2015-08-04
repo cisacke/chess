@@ -1,5 +1,5 @@
 class Piece
-
+  
   DIAGONAL_CHANGE = [
     [1,1],
     [-1,-1],
@@ -25,17 +25,24 @@ class Piece
     [-1,-2]
   ]
 
+  PAWN_CHANGE = [
+      [1,0],
+      [1,1],
+      [1,-1],
+      [2,0]
+  ]
+
   attr_accessor :color, :location
 
-  def initialize(location,color) #[0,1]
+  def initialize(location) #[0,1]
     @location = location
-    @color = color
-    determine_color
+    @color = color # == nil
+    is_white?
   end
 
-  def determine_color
-    color = true if location[0].between?(0,1)
-    color = false if location[0].between?(6,7)
+  def is_white?
+    self.color = true if location[0].between?(0,1)
+    self.color = false if location[0].between?(6,7)
   end
 
 end
@@ -120,6 +127,18 @@ class Knight < SteppingPiece
   end
 end
 
+class Pawn < Piece
 
-Bishop.new([0,2])
-# knight = Piece("knight", [0,1])
+  def moves
+    pos_list = []
+    PAWN_CHANGE.each do | dx,dy |
+      x , y = location
+    # only use [2,0] if pawn is in row 1 and is_white? or
+    # only use  [-2,0] if pawn is in row 6 and !is_white?
+    next if [dx, dy] == [2, 0] unless x == 1 && is_white?
+    next if [dx, dy] == [2, 0] unless x == 6 && !is_white?
+      is_white? ? pos_list << [x + dx, y + dy] : pos_list << [x - dx, y + dy]
+    end
+    pos_list
+  end
+end
