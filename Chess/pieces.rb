@@ -1,30 +1,4 @@
-class Pieces
-
-  attr_accessor :color
-
-  def initialize(location) #[0,1]
-    @location = location
-    @white = false
-    determine_color
-  end
-
-  def determine_color
-    color = true if location[0].between?(0,1)
-    color = false if location[0].between?(6,7)
-  end
-
-  def moves
-    piece_type
-    case
-    when 'Q'
-
-    when 'K'
-
-    when 'N'
-
-    # if
-    #returns an array of valid positions
-  end
+class Piece
 
   DIAGONAL_CHANGE = [
     [1,1],
@@ -51,45 +25,101 @@ class Pieces
     [-1,-2]
   ]
 
-  def sliding
-    #can do this multiple times on the board as long as you your positin exists
+  attr_accessor :color, :location
+
+  def initialize(location,color) #[0,1]
+    @location = location
+    @color = color
+    determine_color
   end
 
-  def stepping
-    #can only do it once
+  def determine_color
+    color = true if location[0].between?(0,1)
+    color = false if location[0].between?(6,7)
   end
+
 end
 
-class SlidingPieces < Pieces
-
-  def initialize(position,color)
-    super(position,color)
-  end
-end
-
-class SteppingPieces < Pieces
-end
-
-class Biship < SlidingPieces
+class SlidingPiece < Piece
 
   def initialize(position,color)
     super(position,color)
   end
 
+  def moves
+    x, y = location
+    pos_list = []
+
+    move_dir.each do |dx, dy|
+      pos_paths = []
+      while x.between?(0,7) && y.between?(0,7)
+         pos_paths << [x, y]
+         x, y = x + dx, y + dy
+      end
+     pos_list << pos_paths
+     pos_paths = []
+     x, y = location
+    end
+    pos_list.delete_if{ |array| array.length == 1}
+  end
+
 end
 
-class Queen < SlidingPieces
+class SteppingPiece < Piece
+
+  def moves
+    x, y = location
+    pos_list = []
+
+    move_dir.each do |dx, dy|
+      if (x+dx).between?(0,7) && (y+dy).between?(0,7)
+        pos_list << [ x + dx, y + dy ]
+      end
+    end
+    pos_list
+  end
+
+
 end
 
-class Rook < SlidingPieces
+class Bishop < SlidingPiece
+
+  def move_dir
+    DIAGONAL_CHANGE
+  end
+
 end
 
-class King < SteppingPieces
+class Queen < SlidingPiece
+
+  def move_dir
+    DIAGONAL_CHANGE + SLIDING_CHANGE
+  end
+
 end
 
-class Knight < SteppingPieces
+class Rook < SlidingPiece
+
+  def move_dir
+    SLIDING_CHANGE
+  end
+end
+
+class King < SteppingPiece
+
+  def move_dir
+    DIAGONAL_CHANGE + SLIDING_CHANGE
+  end
+
+end
+
+class Knight < SteppingPiece
+
+  def move_dir
+    KNIGHT_CHANGE
+  end
 end
 
 
-Biship.new([0,2])
+Bishop.new([0,2])
 # knight = Piece("knight", [0,1])
