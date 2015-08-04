@@ -29,7 +29,6 @@ class Piece
       [1,0],
       [1,1],
       [1,-1],
-      [2,0]
   ]
 
   attr_accessor :color, :location
@@ -134,14 +133,25 @@ end
 class Pawn < Piece
 
   def moves
+    x, y = location
     pos_list = []
-    PAWN_CHANGE.each do | dx,dy |
-      x , y = location
-
-    next if [dx, dy] == [2, 0] unless x == 1 && is_white?
-    next if [dx, dy] == [2, 0] unless x == 6 && !is_white?
-      is_white? ? pos_list << [x + dx, y + dy] : pos_list << [x - dx, y + dy]
+    PAWN_CHANGE.each do | pos |
+      dx , dy = pos
+      color? ? pos_list << [[x + dx, y + dy]] : pos_list << [[x - dx, y + dy]]
     end
-    pos_list
+
+
+
+    if x == 1 && color
+      pos_list << [[x+1,y+0],[x+2,y+0]]
+    elsif x == 6 && !color
+      pos_list << [[x-1,y+0],[x-2,y+0]]
+    end
+
+    pos_list.delete_if do |array|
+       array.flatten.any? { |element| element < 0 || element > 7 }
+     end
   end
+
+
 end

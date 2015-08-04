@@ -15,7 +15,7 @@ class Board
 
     (0...8).each do |y_pos|
       self.grid[1][y_pos] = Pawn.new([1,y_pos])
-      self.grid[7][y_pos] = Pawn.new([7,y_pos])
+      self.grid[6][y_pos] = Pawn.new([6,y_pos])
     end
 
     # white rooks go in [0,0], [0,7]
@@ -40,35 +40,51 @@ class Board
   end
 
   def valid_move?(start_pos, end_pos)
-    # look at
 
-    # what piece is at that position?
+    return false unless has_piece?(start_pos) #position has piece
+    x,y = start_pos
+    white = grid[x][y].color
+
     # where can it move (call move method on that piece)
     # is the end position located in any of the sub arrays in the move return array
         # furthermore, is anything in between the start and the end
 
     # is that end point available for that piece?
-    x,y = start_pos
-    if grid[x][y].moves.flatten.include?(end_pos)
-      check_array = find_check_array(start_pos, end_pos) #build sub_array
-      check_array[0..-2].each do |el|
-        x, y = el
-        return false if grid[x][y] != nil
-      end
-      last_el = check_array[-1]
-      return false if grid[last_el[0]][last_el[1]].color? 
+    position_list = grid[x][y].moves
+    return false unless position_list.any? {|pos| pos == end_pos}
+
+    check_array = find_check_array(start_pos, end_pos) #build sub_array
+    check_array[0..-2].each do |el|
+      x, y = el
+      return false if grid[x][y] != nil
+    end
+
+    last_el = check_array[-1]
+    future_pos = grid[last_el[0]][last_el[1]]
+    return false unless future_pos.nil? || future_pos.color != white
+    true
+  end
+
+  def has_piece?(pos)
+    x,y = pos
+    !grid[x][y].nil?
+  end
       #look through each sub_array[start]
     # is it
     #
-  end
+
 
   def find_check_array(start_pos, end_pos)
-    grid[x][y].moves.each do |move|
-      if move.include?(end_pos)
-        idx = grid[x][y].index(end_pos)
-        return grid[x][y].moves[0..idx]
+    x,y = start_pos
+    sub_array = nil
+    grid[x][y].moves.each_with_index do |move, grid_idx|
+      sub_array = nil
+      if move.include?([end_pos])
+        # idx = grid[x][y].moves.index(end_pos)
+        sub_array = grid[x][y].moves[grid_idx]
       end
     end
+    sub_array
   end
 
 
