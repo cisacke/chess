@@ -78,16 +78,19 @@ class Board
   end
 
   def in_check?(color)
-    locate_king(color)
+    king_pos = locate_king(color)
     # locate the king of argument color
-    # check all opposing pieces to see if their possible moves contains king position
-
-
-    #needs to know if the player is white or black
-    # loop through grid and find where white king is
-    # which black pieces have the position of the king in their next move
-    # if they do, this is a check
-    #
+    boolean_color = piece_color(color)
+    (0..7).each do |col|
+      (0..7).each do |row|
+        chess_piece = self[[col,row]]
+        next if chess_piece.nil?
+        if chess_piece.color != boolean_color
+          return true if chess_piece.valid_move?(king_pos)
+        end
+      end
+    end
+    return false
   end
 
   def locate_king(color)

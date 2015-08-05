@@ -69,9 +69,9 @@ class Piece
     board.grid[row][col]
   end
 
-  def to_s
-    display
-  end
+  # def to_s
+  #   display
+  # end
 
 end
 
@@ -95,41 +95,40 @@ class SlidingPiece < Piece
   end
 
   def valid_move?(end_pos)
-      sub_array = find_check_array(end_pos)
-
-      sub_array[1..-1].each do |move|
-
-      return false if !self[move].nil?
-
+    sub_array = find_check_array(end_pos)
+    return false if sub_array.empty?
+    sub_array[1..-1].each do |move|
+      return false if end_pos != move && !self[move].nil?
       if end_pos == move
-        return false unless self[move] == nil || self[end_move].diff_color?(end_pos)
+        return false unless self[move] == nil || self.diff_color?(end_pos)
         return  true
       end
-
     end
-
-
-
-    return false unless position_list.any? {|pos| pos == end_pos}
-
-    check_array = find_check_array(start_pos, end_pos) #build sub_array
-    check_array[0..-2].each do |el|
-      x, y = el
-      return false if self[start_pos] != nil
-    end
-
-    last_el = check_array[-1]
-    future_pos = self[last_el]
-    return false unless future_pos.nil? || !same_color?(start_pos, end_pos)
-    true
   end
+
+  #
+  #   return false unless position_list.any? {|pos| pos == end_pos}
+  #
+  #   check_array = find_check_array(start_pos, end_pos) #build sub_array
+  #   check_array[0..-2].each do |el|
+  #     x, y = el
+  #     return false if self[start_pos] != nil
+  #   end
+  #
+  #   last_el = check_array[-1]
+  #   future_pos = self[last_el]
+  #   return false unless future_pos.nil? || !same_color?(start_pos, end_pos)
+  #   true
+  # end
 
     def find_check_array(end_pos)
       self.moves.each do |pos_array|
         if pos_array.include?(end_pos)
           return pos_array
         end
+
       end
+      return []
     end
 
 
@@ -234,5 +233,15 @@ class Pawn < SteppingPiece
   #    end
   # end
 
+
+end
+
+if __FILE__ == $PROGRAM_NAME
+
+  b = Board.new
+  b[[1,4]] = b[[7,3]] # move queen
+  b[[1,4]].location = [1,4] #update queen location
+  b.display
+  b.in_check?(:white)
 
 end
