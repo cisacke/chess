@@ -5,9 +5,8 @@ class Board
   #gets position list and checks which ones work.
   attr_accessor :grid
 
-  def initialize
-    @grid = Array.new(8){ Array.new(8)}
-    populate_grid
+  def initialize(grid = Array.new(8){ Array.new(8)})
+    @grid = grid
     #give_piece_board
   end
 
@@ -60,6 +59,8 @@ class Board
   end
 
   def play
+
+    populate_grid # during setup
 # white moves first
 
     start_pos = gets.chomp
@@ -75,6 +76,17 @@ class Board
     return false unless has_piece?(start_pos)
     #return false unless !same_color?(start_pos, end_pos)
     self[start_pos].valid_move?(end_pos)
+  end
+
+  def move_into_check?(start_pos, end_pos, color)
+    self[start_pos] #position of the piece we are moving
+
+    dup_grid = grid.deep_dup_board
+    dup_board = Board.new(dup_grid)
+    dup_board.move(start_pos, end_pos)
+
+    dup_board.in_check?(color)
+
   end
 
   def in_check?(color)
@@ -112,6 +124,36 @@ class Board
 
   def piece_color(color_sym)
     color_sym == :white ? true : false
+  end
+
+
+
+    # def move_into_check?(startend_pos)
+    #   dup_grid = board.grid.deep_dup_board
+    #   dup_board = Board.new(dup_grid)
+    #   dup_board.display
+    #   p self.location
+    #   p self[end_pos]
+    #
+    #   dup_board.move(self.location, self[end_pos])
+    #   dup_board.display
+    # end
+end
+
+class Array
+
+  def deep_dup_board
+    return nil if self.length == 0
+    return nil if self.nil?
+    return self if !self.is_a?(Array)
+
+    self.map do |element|
+       if !element.nil?
+          element.is_a?(Array) ? element.deep_dup_board : element.dup
+        else
+        nil
+        end
+     end
   end
 
 end

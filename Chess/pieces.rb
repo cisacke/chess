@@ -95,6 +95,7 @@ class SlidingPiece < Piece
   end
 
   def valid_move?(end_pos)
+
     sub_array = find_check_array(end_pos)
     return false if sub_array.empty?
     sub_array[1..-1].each do |move|
@@ -105,6 +106,7 @@ class SlidingPiece < Piece
       end
     end
   end
+
 
   #
   #   return false unless position_list.any? {|pos| pos == end_pos}
@@ -239,8 +241,9 @@ end
 if __FILE__ == $PROGRAM_NAME
 
   b = Board.new
-  b[[1,4]] = b[[7,3]] # move queen
-  b[[1,4]].location = [1,4] #update queen location
+  b.populate_grid
+  b[[1,4]] = b[[7,3]]
+  b[[1,4]].location = [1,4] 
   b.display
   b.in_check?(:white)
 
