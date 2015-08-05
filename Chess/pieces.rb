@@ -69,9 +69,9 @@ class Piece
     board.grid[row][col]
   end
 
-  # def to_s
-  #   display
-  # end
+  def to_s
+    display
+  end
 
 end
 

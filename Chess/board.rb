@@ -93,6 +93,14 @@ class Board
     return false
   end
 
+  def move(start_pos, end_pos)
+    if valid_move?(start_pos, end_pos)
+       self[end_pos] = self[start_pos]
+       self[start_pos] = nil
+       self[end_pos].location = end_pos
+    end
+  end
+
   def locate_king(color)
     boolean_color = piece_color(color)
     (0..7).each do |row|
