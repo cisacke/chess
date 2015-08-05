@@ -60,6 +60,7 @@ class Board
   end
 
   def play
+# white moves first
 
     start_pos = gets.chomp
     end_pos = gets.chomp
@@ -76,55 +77,30 @@ class Board
     self[start_pos].valid_move?(end_pos)
   end
 
+  def in_check?(color)
+    locate_king(color)
+    # locate the king of argument color
+    # check all opposing pieces to see if their possible moves contains king position
 
 
-  # def valid_move?(start_pos, end_pos)
-  #
-  #   return false unless has_piece?(start_pos) #position has piece
-  #   return false unless !same_color?(start_pos, end_pos)
-  #
-  #   #what kind of piece is this?
-  #
-  #   self[start_pos]
-  #
-  #   # where can it move (call move method on that piece)
-  #   # is the end position located in any of the sub arrays in the move return array
-  #       # furthermore, is anything in between the start and the end
-  #
-  #   # is that end point available for that piece?
-  #
-  #   position_list = self[start_pos].moves
-  #   return false unless position_list.any? {|pos| pos == end_pos}
-  #
-  #   check_array = find_check_array(start_pos, end_pos) #build sub_array
-  #   check_array[0..-2].each do |el|
-  #     x, y = el
-  #     return false if self[start_pos] != nil
-  #   end
-  #
-  #   last_el = check_array[-1]
-  #   future_pos = self[last_el]
-  #   return false unless future_pos.nil? || !same_color?(start_pos, end_pos)
-  #   true
-  # end
-
-  #
-
-
-
-      #look through each sub_array[start]
-    # is it
-    #
-
-
-
-  def in_check? #needs to know if the player is white or black
+    #needs to know if the player is white or black
     # loop through grid and find where white king is
     # which black pieces have the position of the king in their next move
     # if they do, this is a check
     #
   end
 
+  def locate_king(color)
+    boolean_color = piece_color(color)
+    (0..7).each do |row|
+      (0..7).each do |col|
+        return [row, col] if self[[row, col]].is_a?(King) && self[[row, col]].color == boolean_color
+      end
+    end
+  end
 
+  def piece_color(color_sym)
+    color_sym == :white ? true : false
+  end
 
 end
