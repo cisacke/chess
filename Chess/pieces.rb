@@ -31,12 +31,13 @@ class Piece
       [1,-1],
   ]
 
-  attr_accessor :color, :location, :board
+  attr_accessor :color, :location, :board, :display
 
-  def initialize(location, board = nil) #[0,1]
+  def initialize(location, board = nil, display) #[0,1]
     @location = location
     @color = color # == nil
     @board = board
+    @display = display
     is_white?
   end
 
@@ -68,7 +69,9 @@ class Piece
     board.grid[row][col]
   end
 
-
+  def to_s
+    display
+  end
 
 end
 
@@ -92,9 +95,9 @@ class SlidingPiece < Piece
   end
 
   def valid_move?(end_pos)
-    sub_array = find_check_array(end_pos)
+      sub_array = find_check_array(end_pos)
 
-    sub_array[1..-1].each do |move|
+      sub_array[1..-1].each do |move|
 
       return false if !self[move].nil?
 
@@ -199,28 +202,37 @@ class Knight < SteppingPiece
   end
 end
 
-class Pawn < Piece
+class Pawn < SteppingPiece
+
+
+  def move_dir
+    self.white? ? PAWN_CHANGE : PAWN_CHANGE.map { |num| [num[0] * -1,num[1]] }
+  end
 
   def moves
-    x, y = location
-    pos_list = []
-    PAWN_CHANGE.each do | pos |
-      dx , dy = pos
-      color? ? pos_list << [[x + dx, y + dy]] : pos_list << [[x - dx, y + dy]]
-    end
-
-
-
-    if x == 1 && color
-      pos_list << [[x+1,y+0],[x+2,y+0]]
-    elsif x == 6 && !color
-      pos_list << [[x-1,y+0],[x-2,y+0]]
-    end
-
-    pos_list.delete_if do |array|
-       array.flatten.any? { |element| element < 0 || element > 7 }
-     end
+    super # correct two-step first move
   end
+
+  # def moves
+  #   x, y = location
+  #   pos_list = []
+  #   PAWN_CHANGE.each do | pos |
+  #     dx , dy = pos
+  #     color? ? pos_list << [[x + dx, y + dy]] : pos_list << [[x - dx, y + dy]]
+  #   end
+  #
+  #
+  #
+  #   if x == 1 && color
+  #     pos_list << [[x+1,y+0],[x+2,y+0]]
+  #   elsif x == 6 && !color
+  #     pos_list << [[x-1,y+0],[x-2,y+0]]
+  #   end
+  #
+  #   pos_list.delete_if do |array|
+  #      array.flatten.any? { |element| element < 0 || element > 7 }
+  #    end
+  # end
 
 
 end

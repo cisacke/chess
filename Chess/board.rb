@@ -27,29 +27,36 @@ class Board
     # add white pawns in row 1 and black pawns in row 6
 
     (0...8).each do |y_pos|
-      self.grid[1][y_pos] = Pawn.new([1,y_pos], self)
-      self.grid[6][y_pos] = Pawn.new([6,y_pos], self)
+      self.grid[1][y_pos] = Pawn.new([1,y_pos], self, "P")
+      self.grid[6][y_pos] = Pawn.new([6,y_pos], self, "P")
     end
 
     # white rooks go in [0,0], [0,7]
-    self.grid[0][0], self.grid[0][7]  = Rook.new([0,0],self), Rook.new([0,7],self)
-    self.grid[7][0], self.grid[7][7]  = Rook.new([7,0],self), Rook.new([7,7],self)
+    self.grid[0][0], self.grid[0][7]  = Rook.new([0,0],self, "R"), Rook.new([0,7],self, "R")
+    self.grid[7][0], self.grid[7][7]  = Rook.new([7,0],self, "R"), Rook.new([7,7],self, "R")
 
     # white knights go in [0,1], [0,6]
-    self.grid[0][1], self.grid[0][6]  = Knight.new([0,1],self), Knight.new([0,6],self)
-    self.grid[7][1], self.grid[7][6]  = Knight.new([7,1],self), Knight.new([7,6],self)
+    self.grid[0][1], self.grid[0][6]  = Knight.new([0,1],self, "N"), Knight.new([0,6],self, "N")
+    self.grid[7][1], self.grid[7][6]  = Knight.new([7,1],self, "N"), Knight.new([7,6],self, "N")
 
     # white bishops go in [0,2], [0,5]
-    self.grid[0][2], self.grid[0][5]  = Bishop.new([0,2],self), Bishop.new([0,5],self)
-    self.grid[7][2], self.grid[7][5]  = Bishop.new([7,2],self), Bishop.new([7,5],self)
+    self.grid[0][2], self.grid[0][5]  = Bishop.new([0,2],self, "B"), Bishop.new([0,5],self, "B")
+    self.grid[7][2], self.grid[7][5]  = Bishop.new([7,2],self, "B"), Bishop.new([7,5],self, "B")
 
     # Queen goes in [0,3]
-    self.grid[0][3], self.grid[7][3]  = Queen.new([0,3],self), Queen.new([7,3],self)
+    self.grid[0][3], self.grid[7][3]  = Queen.new([0,3],self, "Q"), Queen.new([7,3],self, "Q")
 
     # King goes in [0,4]
-    self.grid[0][4], self.grid[7][4]  = King.new([0,4],self), King.new([7,4],self)
+    self.grid[0][4], self.grid[7][4]  = King.new([0,4],self, "K"), King.new([7,4],self, "K")
     # for black its the same thing except x = 7
 
+  end
+
+  def display
+    grid.each do |row|
+      puts row.join(" ") # implicitely calls the to_s
+    end
+    nil
   end
 
   def play
