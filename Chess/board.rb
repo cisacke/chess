@@ -62,11 +62,25 @@ class Board
 
     populate_grid # during setup
 # white moves first
+    self.grid.display
+
+    user_move_input
 
     start_pos = gets.chomp
     end_pos = gets.chomp
     valid_move?(start_pos, end_pos)
   end
+
+  def user_start_pos
+    puts "input start position"
+    start_pos = gets.chomp.split(",").map { |num| num.to_i}
+  end
+
+  # def user_end_pos
+  #   puts "input end position"
+  #   end_pos = gets.chomp.split(",").map {&:to_i}
+  # end
+
 
   def has_piece?(pos)
     !self[pos].nil?
@@ -126,18 +140,6 @@ class Board
     color_sym == :white ? true : false
   end
 
-
-
-    # def move_into_check?(startend_pos)
-    #   dup_grid = board.grid.deep_dup_board
-    #   dup_board = Board.new(dup_grid)
-    #   dup_board.display
-    #   p self.location
-    #   p self[end_pos]
-    #
-    #   dup_board.move(self.location, self[end_pos])
-    #   dup_board.display
-    # end
 end
 
 class Array
