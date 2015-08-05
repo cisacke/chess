@@ -91,20 +91,45 @@ class SlidingPiece < Piece
     pos_list.delete_if{ |array| array.length == 1}
   end
 
-  def valid_move?(end_piece)
-    # return false unless position_list.any? {|pos| pos == end_pos}
-    #
-    # check_array = find_check_array(start_pos, end_pos) #build sub_array
-    # check_array[0..-2].each do |el|
-    #   x, y = el
-    #   return false if self[start_pos] != nil
-    # end
-    #
-    # last_el = check_array[-1]
-    # future_pos = self[last_el]
-    # return false unless future_pos.nil? || !same_color?(start_pos, end_pos)
-    # true
+  def valid_move?(end_pos)
+    sub_array = find_check_array(end_pos)
+
+    sub_array[1..-1].each do |move|
+
+      return false if !self[move].nil?
+
+      if end_pos == move
+        return false unless self[move] == nil || self[end_move].diff_color?(end_pos)
+        return  true
+      end
+
+    end
+
+
+
+    return false unless position_list.any? {|pos| pos == end_pos}
+
+    check_array = find_check_array(start_pos, end_pos) #build sub_array
+    check_array[0..-2].each do |el|
+      x, y = el
+      return false if self[start_pos] != nil
+    end
+
+    last_el = check_array[-1]
+    future_pos = self[last_el]
+    return false unless future_pos.nil? || !same_color?(start_pos, end_pos)
+    true
   end
+
+    def find_check_array(end_pos)
+      self.moves.each do |pos_array|
+        if pos_array.include?(end_pos)
+          return pos_array
+        end
+      end
+    end
+
+
 
 end
 
@@ -123,14 +148,9 @@ class SteppingPiece < Piece
   end
 
   def valid_move?(end_pos)
-    start_pos = self.location
-    position_list = self.moves
-    p "position list : #{position_list}"
-    p "end_pos #{end_pos}"
     return false unless self.moves.any? {|move|  move == end_pos }
     return false unless same_color?(end_pos) || self[end_pos].nil?
     return true
-
   end
 
   def piece_taken?(end_pos)

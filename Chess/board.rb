@@ -16,13 +16,19 @@ class Board
     @grid[x][y]
   end
 
+  def []=(pos,value)
+    x, y = pos
+    @grid[x][y] = value
+  end
+
+
 
   def populate_grid
     # add white pawns in row 1 and black pawns in row 6
 
     (0...8).each do |y_pos|
-      self.grid[1][y_pos] = Pawn.new([1,y_pos])
-      self.grid[6][y_pos] = Pawn.new([6,y_pos])
+      self.grid[1][y_pos] = Pawn.new([1,y_pos], self)
+      self.grid[6][y_pos] = Pawn.new([6,y_pos], self)
     end
 
     # white rooks go in [0,0], [0,7]
@@ -103,19 +109,6 @@ class Board
     # is it
     #
 
-
-  def find_check_array(start_pos, end_pos)
-    x,y = start_pos
-    sub_array = nil
-    grid[x][y].moves.each_with_index do |move, grid_idx|
-      sub_array = nil
-      if move.include?([end_pos])
-        # idx = grid[x][y].moves.index(end_pos)
-        sub_array = grid[x][y].moves[grid_idx]
-      end
-    end
-    sub_array
-  end
 
 
   def in_check? #needs to know if the player is white or black
