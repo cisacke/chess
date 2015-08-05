@@ -58,6 +58,11 @@ class Piece
     self.color == self[end_pos].color
   end
 
+  def diff_color?(end_pos)
+    return false if self[end_pos].nil?
+    self.color != self[end_pos].color
+  end
+
   def [](pos)
     row,col = pos
     board.grid[row][col]
@@ -122,14 +127,14 @@ class SteppingPiece < Piece
     position_list = self.moves
     p "position list : #{position_list}"
     p "end_pos #{end_pos}"
-    return false unless self.moves.any? {|move|  move != end_pos }
+    return false unless self.moves.any? {|move|  move == end_pos }
     return false unless same_color?(end_pos) || self[end_pos].nil?
     return true
 
   end
 
   def piece_taken?(end_pos)
-    return !same_color?(end_pos) if valid_move?(end_pos)
+    return diff_color?(end_pos) if valid_move?(end_pos)
     return false
   end
 
